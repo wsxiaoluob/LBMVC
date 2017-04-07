@@ -143,7 +143,7 @@ class LBListDefaultPullRefreshView: UIView, LBListPullRefreshViewDelegate {
     var indicator:UIActivityIndicatorView?;
     var textLabel:UILabel?;
     var progress:Float = 0;
-    var bRefreshing:Bool! = false;
+    var bRefreshing:Bool = false;
     var controller: LBTableViewController?;
     
     override init(frame: CGRect) {
