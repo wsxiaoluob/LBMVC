@@ -31,7 +31,7 @@ class LBTableViewController: LBViewController {
             self.dataSource.controller = self;
         }
     }
-    public var delegate:LBTableViewDelegate! {
+    weak public var delegate:LBTableViewDelegate! {
         didSet {
             self.tableView.delegate = delegate;
             self.delegate.controller = self;

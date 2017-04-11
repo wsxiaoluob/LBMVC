@@ -22,7 +22,7 @@ enum LBModelMode {
     case loadMore
 }
 
-protocol LBModelDelegate {
+protocol LBModelDelegate:class {
     func modelDidStart(model:LBModel!)
     func modelDidFinish(model:LBModel!)
     func modelDidFail(model:LBModel!, error:NSError!)
@@ -75,7 +75,7 @@ class LBModel: NSObject, LBRequestDelegate {
     
     private(set) var mode:LBModelMode = .load
     
-    var delegate:LBModelDelegate?
+    weak var delegate:LBModelDelegate?
     
     var requestCallback:LBModelCallback?
     
@@ -174,7 +174,12 @@ class LBModel: NSObject, LBRequestDelegate {
     func requestDidStartLoad(request: LBRequest!) {
         self.state = LBModelState.Loading;
         //TODO: respondesToSelector
-        self.delegate?.modelDidStart(model: self);
+        if self.delegate != nil {
+            let _delegate:NSObject = self.delegate! as! NSObject;
+            if _delegate.responds(to: Selector(("modelDidStart"))) {
+                self.delegate?.modelDidStart(model: self);
+            }
+        }
     }
     func requestDidFinish(JSON: Any!) {
         self.isFromCache = self.request.isFromCache;

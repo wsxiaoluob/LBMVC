@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol LBRequestDelegate {
+protocol LBRequestDelegate:class {
     func requestDidStartLoad(request:LBRequest!)
     func requestDidFinish(JSON:Any!)
     func requestDidFailWithError(error:NSError?)
 }
 
-protocol LBRequest {
+protocol LBRequest:class {
     var useAuth: Bool {get set}
     var useCache: Bool {get set}
     var usePost: Bool {get set}

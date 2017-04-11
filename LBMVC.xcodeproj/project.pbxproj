@@ -10,7 +10,6 @@
 		03AFFE373444FE25ECE814D4 /* libPods-LBMVC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0737C04C17BCEDCD535646B /* libPods-LBMVC.a */; };
 		310FCF3C1E8B5EA200B6E3A1 /* LBItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 310FCF3B1E8B5EA200B6E3A1 /* LBItem.swift */; };
 		310FCF3E1E8B661900B6E3A1 /* LBViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 310FCF3D1E8B661900B6E3A1 /* LBViewController.swift */; };
-		310FCF401E8BA04000B6E3A1 /* podfile in Resources */ = {isa = PBXBuildFile; fileRef = 310FCF3F1E8BA04000B6E3A1 /* podfile */; };
 		3116F56C1E8CBA8C0099652A /* LBError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3116F56B1E8CBA8C0099652A /* LBError.swift */; };
 		3116F5701E8CE1F20099652A /* LBTableViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3116F56F1E8CE1F20099652A /* LBTableViewItem.swift */; };
 		3116F5721E8CED320099652A /* LBTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3116F5711E8CED320099652A /* LBTableViewCell.swift */; };
@@ -36,7 +35,6 @@
 /* Begin PBXFileReference section */
 		310FCF3B1E8B5EA200B6E3A1 /* LBItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBItem.swift; sourceTree = "<group>"; };
 		310FCF3D1E8B661900B6E3A1 /* LBViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBViewController.swift; sourceTree = "<group>"; };
-		310FCF3F1E8BA04000B6E3A1 /* podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = podfile; path = LBMVC/podfile; sourceTree = "<group>"; };
 		3116F56B1E8CBA8C0099652A /* LBError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBError.swift; sourceTree = "<group>"; };
 		3116F56F1E8CE1F20099652A /* LBTableViewItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBTableViewItem.swift; sourceTree = "<group>"; };
 		3116F5711E8CED320099652A /* LBTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBTableViewCell.swift; sourceTree = "<group>"; };
@@ -111,7 +109,6 @@
 			isa = PBXGroup;
 			children = (
 				315838A41E962FF8002F01A3 /* demo */,
-				310FCF3F1E8BA04000B6E3A1 /* podfile */,
 				315D932A1E890B47001B3127 /* LBMVC */,
 				315D93181E890AFD001B3127 /* AppDelegate.swift */,
 				315D931F1E890AFD001B3127 /* Assets.xcassets */,
@@ -167,12 +164,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 315D93271E890AFD001B3127 /* Build configuration list for PBXNativeTarget "LBMVC" */;
 			buildPhases = (
-				E247F4CCCC08A012503AB056 /* 📦 Check Pods Manifest.lock */,
+				E247F4CCCC08A012503AB056 /* [CP] Check Pods Manifest.lock */,
 				315D93111E890AFD001B3127 /* Sources */,
 				315D93121E890AFD001B3127 /* Frameworks */,
 				315D93131E890AFD001B3127 /* Resources */,
-				F7E5FFC211BB45D88A31DE4B /* 📦 Embed Pods Frameworks */,
-				576A8FCED68C525B7D7E0F19 /* 📦 Copy Pods Resources */,
+				F7E5FFC211BB45D88A31DE4B /* [CP] Embed Pods Frameworks */,
+				576A8FCED68C525B7D7E0F19 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -226,21 +223,20 @@
 			files = (
 				315D93231E890AFD001B3127 /* LaunchScreen.storyboard in Resources */,
 				315D93201E890AFD001B3127 /* Assets.xcassets in Resources */,
-				310FCF401E8BA04000B6E3A1 /* podfile in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		576A8FCED68C525B7D7E0F19 /* 📦 Copy Pods Resources */ = {
+		576A8FCED68C525B7D7E0F19 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -248,29 +244,29 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LBMVC/Pods-LBMVC-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E247F4CCCC08A012503AB056 /* 📦 Check Pods Manifest.lock */ = {
+		E247F4CCCC08A012503AB056 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		F7E5FFC211BB45D88A31DE4B /* 📦 Embed Pods Frameworks */ = {
+		F7E5FFC211BB45D88A31DE4B /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;

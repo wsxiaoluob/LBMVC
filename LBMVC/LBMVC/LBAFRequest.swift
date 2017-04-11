@@ -20,7 +20,7 @@ class LBAFRequest: NSObject, LBRequest {
     var mode: LBModelMode = .load
     var timeOutSeconds: TimeInterval = 0.0
     var apiCacheTimeOutSeconds: TimeInterval = 0.0
-    var delegate: LBRequestDelegate!
+    weak var delegate: LBRequestDelegate!
     var responseString: String?
     var responseObject: Any?
 
