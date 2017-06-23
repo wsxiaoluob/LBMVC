@@ -8,23 +8,39 @@
 
 import UIKit
 
+enum LBListModelPageMode {
+    //当前数据大于0条即尝试翻页
+    case always;
+    //如果当前数据少于pageSize则不翻页，等于或多于pageSize再翻页
+    case returnCount
+}
+
 class LBListModel: LBModel {
     var hasMore:Bool = false
     var currentPageIndex:Int = 0
     var totalCount:Int = 0
-    var pageSize:Int = 20
+    var pageSize:Int {
+        return 20;
+    }
+    var pageMode:LBListModelPageMode {
+        return .returnCount;
+    }
     var sectionNumber:Int = 0
     
     override func parse(_ JSON: Any?) -> Bool {
-        if !super.parse(JSON) {
-            return super.parse(JSON)
+        let ret = super.parse(JSON);
+        if !ret {
+            return false;
         } else {
-            var error:NSError? = nil;
-            let list:Array<AnyObject>? = self.parseResponse(object: JSON, error: &error);
-            if error != nil {
-                self.requestDidFailWithError(error: error);
+            if self.parsedResponse != nil {
+                switch self.pageMode {
+                case .always:
+                    self.hasMore = self.parsedResponse!.count > 0;
+                case .returnCount:
+                    self.hasMore = self.parsedResponse!.count >= self.pageSize;
+                }
             } else {
-                self.hasMore = (list?.count)! >= self.pageSize;
+                self.hasMore = false;
             }
         }
         return true;

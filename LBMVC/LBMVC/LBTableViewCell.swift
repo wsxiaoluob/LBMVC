@@ -8,25 +8,15 @@
 
 import UIKit
 
-protocol LBTableviewCellDelegate {
+protocol LBTableviewCellDelegate:class {
     func onCellComponentClicked(AtIndex index:IndexPath!,bundle extra:Dictionary<String, Any>?)
 }
 
 class LBTableViewCell: UITableViewCell {
     var indexPath:IndexPath?
     var item:LBTableViewItem?
-    var delegate:LBTableviewCellDelegate?
+    weak var delegate:LBTableviewCellDelegate?
     
-    /// cell高度计算 此方法在主线程回调，如果需要很复杂的计算请使用item.itemHeight字段
-    ///
-    /// - Parameters:
-    ///   - tableView: cell所在tableview
-    ///   - item: cell对应数据源
-    ///   - indexPath: cell的indexPath
-    /// - Returns: 高度
-    class func tableView(tableView:UITableView!, variantRowHeightForItem item:AnyObject!, AtIndex indexPath:IndexPath!) -> CGFloat {
-        return 44;
-    }
     required override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier);
         
@@ -37,5 +27,11 @@ class LBTableViewCell: UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder);
+    }
+    
+    /// 在此方法内布局，布局之后可以设置item.itemHeight，
+    /// warning: 此方法内不要调用self.width和self.height，宽度可以调用item.tableViewWidth
+    func setupSubviews() {
+        //DO NOTHING
     }
 }

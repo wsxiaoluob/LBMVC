@@ -92,10 +92,11 @@ class LBModel: NSObject, LBRequestDelegate {
     var isFromCache:Bool = false
     var responseObject:Any?
     var responseString:String?
+    var parsedResponse:[AnyObject]?
     var cacheKey:String?
     
     func load() {
-        self.mode = LBModelMode.load;
+        self.mode = .load;
         self.reset();
         
         if self._prepareForload() {
@@ -120,10 +121,14 @@ class LBModel: NSObject, LBRequestDelegate {
     }
     func loadMore() {
         self.mode = .loadMore;
-        self.loadInternal();
+        if self.state != .Loading {
+            self.loadInternal();
+        }
     }
     func reset() {
-        self.cancel();
+        if self.state == .Loading {
+            self.cancel();
+        }
         self.itemList?.reset();
     }
     func _prepareForload() -> Bool {
@@ -160,7 +165,7 @@ class LBModel: NSObject, LBRequestDelegate {
         
         self.request.setup(baseUrl: self.urlPath())
         
-        self.request.addParams(params:dataParams, forKey: "data");
+        let _ = self.request.addParams(params:dataParams, forKey: "data");
         self.request.addHeaderParams(params: self.headerParams());
         
         if self.usePost() {
@@ -172,13 +177,9 @@ class LBModel: NSObject, LBRequestDelegate {
         }
     }
     func requestDidStartLoad(request: LBRequest!) {
-        self.state = LBModelState.Loading;
-        //TODO: respondesToSelector
+        self.state = .Loading;
         if self.delegate != nil {
-            let _delegate:NSObject = self.delegate! as! NSObject;
-            if _delegate.responds(to: Selector(("modelDidStart"))) {
-                self.delegate?.modelDidStart(model: self);
-            }
+            self.delegate?.modelDidStart(model: self);
         }
     }
     func requestDidFinish(JSON: Any!) {
@@ -206,6 +207,11 @@ class LBModel: NSObject, LBRequestDelegate {
         
         self.responseString = self.request.responseString;
         self.responseObject = self.request.responseObject;
+        self.delegate?.modelDidFail(model: self, error: error);
+        if self.requestCallback != nil {
+            self.requestCallback!(self, error);
+            self.requestCallback = nil;
+        }
     }
     func parse(_ JSON:Any?) -> Bool {
         var error:NSError? = nil;
@@ -214,12 +220,12 @@ class LBModel: NSObject, LBRequestDelegate {
             return false;
         }
         
-        let list:Array<AnyObject>? = self.parseResponse(object: JSON, error: &error);
+        self.parsedResponse = self.parseResponse(object: JSON, error: &error);
         if error != nil {
             self.requestDidFailWithError(error: error);
             return false;
         } else {
-            self.itemList?.addObjectFromArray(otherArray: list);
+            self.itemList?.addObjectFromArray(otherArray: self.parsedResponse);
             return true;
         }
     }

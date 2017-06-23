@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 typealias LBAFSuccess = (URLSessionTask?, Any) -> Void
 typealias LBAFFailure = (URLSessionDataTask?, Error) -> Void
 
@@ -27,7 +28,7 @@ class LBAFRequest: NSObject, LBRequest {
     var manager:AFHTTPSessionManager?
     var requestOperation:URLSessionTask?
     var url:String?
-    var queries:Dictionary<String, String>?
+    var queries:Dictionary<String, String> = [:]
     var requestStartTimeStamp:Double! = 0
     var requestEndTimeStamp:Double! = 0
     
@@ -41,13 +42,19 @@ class LBAFRequest: NSObject, LBRequest {
         self.manager?.responseSerializer.acceptableContentTypes = ["application/json", "text/json", "text/javascript", "text/plain", "text/html"];
         self.manager?.requestSerializer.timeoutInterval = self.timeOutSeconds;
     }
-    func addParams(params: Dictionary<String, Any>?, forKey key: String) {
+    func addParams(params: Dictionary<String, Any>?, forKey key: String) -> String? {
         if params != nil {
-            //TODO
+            //TODO`\
             let data:Data? = try? JSONSerialization.data(withJSONObject: params!, options: JSONSerialization.WritingOptions.prettyPrinted);
-            let quesries:String! = data == nil ? "{}" : String.init(data: data!, encoding: String.Encoding.utf8);
-            self.queries?[key] = quesries;
+            let timestamp = ceil(Date.init(timeIntervalSinceNow: 0).timeIntervalSince1970);
+            let quesries:String = data == nil ? "{}" : String.init(data: data!, encoding: String.Encoding.utf8)!;
+            self.queries[key] = quesries;
+            self.queries["t"] = "\(Int64(timestamp) * 1000)";
+            
+            let request = self.manager!.requestSerializer.request(withMethod: self.usePost ? "POST" : "GET", urlString: self.url!, parameters: self.queries, error: nil);
+            return request.url?.absoluteString;
         }
+        return nil;
     }
     func addHeaderParams(params: Dictionary<String, String>?) {
         self.requestStartTimeStamp = Date.timeIntervalBetween1970AndReferenceDate;
@@ -60,23 +67,15 @@ class LBAFRequest: NSObject, LBRequest {
         for (key, obj) in nsDic {
             self.manager?.requestSerializer.setValue(String(describing: obj), forHTTPHeaderField: String(describing: key));
         }
-        self.manager?.requestSerializer.setValue(String(self.requestStartTimeStamp), forHTTPHeaderField: "Timestamp");
-        //TODO sign
     }
     func addBodyData(data: Dictionary<String, Any>?, forKey key: String) {
         //TODO
     }
     func load() {
         DispatchQueue.main.sync {
-            self.delegate.requestDidStartLoad(request: self);
+            self.delegate?.requestDidStartLoad(request: self);
         }
-        let request = self.manager!.requestSerializer.request(withMethod: self.usePost ? "POST" : "GET", urlString: self.url!, parameters: self.queries, error: nil);
-        let cacheKey:String? = request.url?.absoluteString;
-        print("#LBAFRequest# RequestDidStartLoad: \(cacheKey ?? "")");
-        print("#LBAFRequest# HTTPAdditionalHeaders: \(self.manager?.requestSerializer.httpRequestHeaders.description ?? "")")
-        
-        var newQueries:Dictionary<String, String>! = self.queries ?? [:];
-        newQueries["t"] = Date.timeIntervalBetween1970AndReferenceDate.description;
+        debugPrint("#LBAFRequest# HTTPAdditionalHeaders: \(self.manager?.requestSerializer.httpRequestHeaders.description ?? "")")
         
         let success:LBAFSuccess = {(task:URLSessionTask?, responseObj:Any) in
             self.responseObject = responseObj;
@@ -86,33 +85,35 @@ class LBAFRequest: NSObject, LBRequest {
             
             print("#LBAFRequest# requestDidFinish：\(self.url ?? ""), \(self.responseString ?? "")")
             DispatchQueue.main.async {
-                self.delegate.requestDidFinish(JSON: responseObj);
+                self.delegate?.requestDidFinish(JSON: responseObj);
             }
         }
         let failure:LBAFFailure = {(task:URLSessionDataTask?, error:Error) in
             self.responseString = task?.response?.description;
             print("#LBAFRequest# requestDidFailWithError：\(error.localizedDescription)");
-            DispatchQueue.main.async {
-                self.delegate.requestDidFailWithError(error: NSError.init(domain: "domain", code: -1, userInfo: nil));
+            
+            if error.localizedDescription != "已取消" {
+                DispatchQueue.main.async {
+                    let error = NSError.init(domain: NSCocoaErrorDomain, code: -999, userInfo: [NSLocalizedDescriptionKey: "网络错误"]);
+                    self.delegate?.requestDidFailWithError(error: error);
+                }
             }
         }
         //TODO:读cache相关
         self.isFromCache = false;
         if self.usePost {
-            self.requestOperation = self.manager?.post(self.url!, parameters: newQueries, progress: nil, success: success, failure: failure);
+            self.requestOperation = self.manager?.post(self.url!, parameters: self.queries, progress: nil, success: success, failure: failure);
         } else {
-            self.requestOperation = self.manager?.get(self.url!, parameters: newQueries, progress: nil, success: success, failure: failure);
+            self.requestOperation = self.manager?.get(self.url!, parameters: self.queries, progress: nil, success: success, failure: failure);
         }
         
     }
     func cancel() {
-        if self.requestOperation != nil {
-            self.requestOperation!.cancel();
-        }
+        self.requestOperation?.cancel();
     }
     
     
     func HTTPHeaders() -> Dictionary<String, String>! {
-        return ["User-Agent": "ios \(UIDevice.current.systemVersion)/Version 1.0"]
+        return [:]
     }
 }

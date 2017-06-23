@@ -38,7 +38,7 @@ protocol LBRequest:class {
     /// - Parameters:
     ///   - params: 参数
     ///   - key: key
-    func addParams(params: Dictionary<String, Any>?, forKey key: String)
+    func addParams(params: Dictionary<String, Any>?, forKey key: String) -> String?
     
     /// 增加HTTP请求头
     ///

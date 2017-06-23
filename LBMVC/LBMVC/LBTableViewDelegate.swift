@@ -16,20 +16,15 @@ protocol LBListPullRefreshViewDelegate {
 }
 
 class LBTableViewDelegate: NSObject, UITableViewDelegate, LBTableviewCellDelegate {
-    var bScrolling: Bool = false;
-    var controller: LBTableViewController?;
+    weak var controller: LBTableViewController?;
     var pullRefreshView: LBListPullRefreshViewDelegate? {
-        set {
-            self.pullRefreshView = newValue;
-            if newValue != nil {
-                self.controller?.tableView.addSubview(newValue as! UIView);
+        didSet {
+            if self.pullRefreshView != nil {
+                self.controller?.tableView.addSubview(self.pullRefreshView as! UIView);
             } else {
                 let pullView:UIView? = self.pullRefreshView as? UIView;
                 pullView?.removeFromSuperview();
             }
-        }
-        get {
-            return self.pullRefreshView ?? self.pullRefreshViewInternal;
         }
     };
     lazy var pullRefreshViewInternal: LBListDefaultPullRefreshView! = {() -> LBListDefaultPullRefreshView in
@@ -42,7 +37,7 @@ class LBTableViewDelegate: NSObject, UITableViewDelegate, LBTableviewCellDelegat
             return _pullRefreshViewInternal;
         }
         
-        return LBListDefaultPullRefreshView.init(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0));
+        return LBListDefaultPullRefreshView.init(frame: .zero);
     }()
     func beginRefresh() {
         if self.controller != nil && self.controller!.bNeedPullRefresh {
@@ -69,28 +64,24 @@ class LBTableViewDelegate: NSObject, UITableViewDelegate, LBTableviewCellDelegat
         self.controller?.tableView(tableView, didSelectRowAt: indexPath);
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        var cls:AnyClass?;
         if tableView.dataSource is LBTableViewDataSource {
             let dataSource:LBTableViewDataSource = tableView.dataSource as! LBTableViewDataSource;
             let item:LBTableViewItem = dataSource.itemForCell(AtIndex: indexPath)!;
             if item.itemHeight > 0 {
                 return item.itemHeight;
-            } else {
-                cls = dataSource.cellClassFor(Item: item, AtIndex: indexPath);
-                if cls is LBTableViewCell.Type {
-                    let cellCls = cls as! LBTableViewCell.Type;
-                    return cellCls.tableView(tableView: tableView, variantRowHeightForItem: item, AtIndex: indexPath);
-                }
             }
         }
-        return 44;
+        return 100;
     }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let sections = self.controller?.dataSource.numberOfSections(in: tableView);
-        if sections != nil && indexPath.section == Int(sections! - 1) {
-            let items = self.controller?.dataSource.getItems(Section: indexPath.section);
+        guard self.controller != nil else {
+            return;
+        }
+        let sections = self.controller!.dataSource.numberOfSections(in: tableView);
+        if indexPath.section == Int(sections - 1) {
+            let items = self.controller!.dataSource.getItems(Section: indexPath.section);
             if items != nil && indexPath.row == items!.count - 1 {
-                self.controller?.loadMore();
+                self.controller!.loadMore();
             }
         }
     }
@@ -113,20 +104,24 @@ class LBTableViewDelegate: NSObject, UITableViewDelegate, LBTableviewCellDelegat
         }
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        self.bScrolling = false;
-        if self.controller != nil {
-            if self.controller!.bNeedPullRefresh {
-                self.pullRefreshView?.scrollviewDidEndDragging(scrollview: scrollView);
-            }
-            self.controller!.scrollViewDidEndDragging(scrollView, willDecelerate: decelerate);
+        guard self.controller != nil else {
+            return;
         }
+        if self.controller!.bNeedPullRefresh {
+            self.pullRefreshView?.scrollviewDidEndDragging(scrollview: scrollView);
+        }
+        self.controller!.scrollViewDidEndDragging(scrollView, willDecelerate: decelerate);
+    }
+    func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+        if self.controller != nil {
+            self.controller!.scrollViewShouldScrollToTop(scrollView);
+        }
+        return true;
     }
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.bScrolling = true;
         self.controller?.scrollViewWillBeginDragging(scrollView);
     }
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        self.bScrolling = false;
         self.controller?.scrollViewDidEndDecelerating(scrollView);
     }
     
@@ -136,7 +131,7 @@ enum PullRefreshState {
     case idle, pulling, loading
 }
 
-let kRefreshViewHeight:CGFloat = 65.0;
+let kRefreshViewHeight:CGFloat = 40.0;
 
 class LBListDefaultPullRefreshView: UIView, LBListPullRefreshViewDelegate {
     var state:PullRefreshState?;
@@ -144,7 +139,7 @@ class LBListDefaultPullRefreshView: UIView, LBListPullRefreshViewDelegate {
     var textLabel:UILabel?;
     var progress:Float = 0;
     var bRefreshing:Bool = false;
-    var controller: LBTableViewController?;
+    weak var controller: LBTableViewController?;
     
     override init(frame: CGRect) {
         super.init(frame: frame);
@@ -236,6 +231,6 @@ class LBListDefaultPullRefreshView: UIView, LBListPullRefreshViewDelegate {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder);
     }
 }

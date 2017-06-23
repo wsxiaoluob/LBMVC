@@ -9,7 +9,6 @@
 import UIKit
 
 class LBTableViewController: LBViewController {
-    
     override init() {
         super.init();
         self.tableView = UITableView.init(frame: CGRect.zero, style: self.tableViewStyle);
@@ -41,11 +40,9 @@ class LBTableViewController: LBViewController {
     public var keyModel:LBListModel?
     public var bNeedLoadMore:Bool = false;
     public var bNeedPullRefresh:Bool = false;
-    public var clearItemsWhenModelReload:Bool = true;
+    public var clearItemsWhenModelReload:Bool = false;
     public var tableViewStyle:UITableViewStyle {
-        get {
-            return .plain;
-        }
+        return .plain;
     }
     
     public func loadModelForSection(_ section:Int) {
@@ -116,11 +113,16 @@ class LBTableViewController: LBViewController {
     }
     override func reload() {
         assert(self.keyModel != nil, "至少需要指定一个keymodel");
+        if self.clearItemsWhenModelReload {
+            self.dataSource.removeAllItems();
+            self.reloadTableView();
+        }
+        super.reload();
     }
     override func loadMore() {
         if self.bNeedLoadMore {
             assert(self.keyModel != nil, "至少需要指定一个keymodel");
-            if (self.keyModel?.hasMore)! {
+            if self.keyModel!.hasMore {
                 self.keyModel?.loadMore()
             }
         }
@@ -173,11 +175,17 @@ class LBTableViewController: LBViewController {
     override func showEmpty(_ model: LBModel!) {
         super.showEmpty(model);
         self.endRefreshing();
-        self.showNoResult(model as! LBListModel);
+        if model is LBListModel {
+            self.showNoResult(model as! LBListModel);
+        }
     }
     override func showLoading(_ model: LBModel!) {
         if model == self.keyModel {
-            self.tableView.tableFooterView = self.footerViewLoading;
+            if self.dataSource.itemForSection.isEmpty || !self.bNeedPullRefresh || model.mode != .reload {
+                self.tableView.tableFooterView = self.footerViewLoading;
+            } else {
+                self.beginRefreshing();
+            }
         } else {
             //section model是否需要loading
         }
@@ -190,19 +198,20 @@ class LBTableViewController: LBViewController {
     }
     override func showError(error: NSError!, model: LBModel!) {
         self.endRefreshing();
-        let listModel:LBListModel = model as! LBListModel;
-        if model == self.keyModel {
-            if model.itemList?.array.count == 0 {
-                if listModel.sectionNumber == 0 {
-                    self.tableView.tableFooterView = LBTableViewFactory.getErrorFooterView(Frame: CGRect.init(x: 0, y: 0, width: self.view.frame.size.width, height: self.tableView.frame.size.height), Text: error.localizedDescription);
+        if let listModel = model as? LBListModel {
+            if model == self.keyModel {
+                if model.itemList?.array.count == 0 {
+                    if listModel.sectionNumber == 0 {
+                        self.tableView.tableFooterView = LBTableViewFactory.getErrorFooterView(Frame: CGRect.init(x: 0, y: 0, width: self.view.frame.size.width, height: self.tableView.frame.size.height), Text: error.localizedDescription);
+                    } else {
+                        self.tableView.tableFooterView = LBTableViewFactory.getErrorFooterView(Frame: CGRect.init(x: 0, y: 0, width: self.view.frame.size.width, height: 44), Text: error.localizedDescription);
+                    }
                 } else {
-                    self.tableView.tableFooterView = LBTableViewFactory.getErrorFooterView(Frame: CGRect.init(x: 0, y: 0, width: self.view.frame.size.width, height: 44), Text: error.localizedDescription);
+                    self.tableView.tableFooterView = nil;
                 }
             } else {
-                self.tableView.tableFooterView = nil;
+                //section model 是否需要error
             }
-        } else {
-            //section model 是否需要error
         }
     }
     //MARK: - private 
@@ -251,5 +260,8 @@ class LBTableViewController: LBViewController {
     }
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         
+    }
+    func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) {
+    
     }
 }

@@ -13,9 +13,10 @@ enum LBTableViewItemType {
 }
 
 class LBTableViewItem: LBItem, NSCoding {
-    var indexPath: IndexPath! = IndexPath.init(row: 0, section: 0);
-    var itemHeight: CGFloat! = 0
-    var itemType: LBTableViewItemType?
+    var indexPath: IndexPath = IndexPath.init(row: 0, section: 0);
+    var itemHeight: CGFloat = 0;
+    var tableViewWidth: CGFloat = 0;
+    var itemType: LBTableViewItemType?;
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(self.indexPath, forKey: "indexPath");
