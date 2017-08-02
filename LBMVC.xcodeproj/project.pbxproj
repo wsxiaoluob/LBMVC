@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		03AFFE373444FE25ECE814D4 /* libPods-LBMVC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0737C04C17BCEDCD535646B /* libPods-LBMVC.a */; };
+		310D23431F2F366800FF9BE8 /* LBItemProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 310D23421F2F366800FF9BE8 /* LBItemProperty.swift */; };
 		310FCF3C1E8B5EA200B6E3A1 /* LBItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 310FCF3B1E8B5EA200B6E3A1 /* LBItem.swift */; };
 		310FCF3E1E8B661900B6E3A1 /* LBViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 310FCF3D1E8B661900B6E3A1 /* LBViewController.swift */; };
 		3116F56C1E8CBA8C0099652A /* LBError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3116F56B1E8CBA8C0099652A /* LBError.swift */; };
@@ -30,9 +30,12 @@
 		31A2B4801E9635BD002C04AE /* DemoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A2B47F1E9635BD002C04AE /* DemoModel.swift */; };
 		31E71A9D1E8BAC57009140DB /* LBAFRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31E71A9C1E8BAC57009140DB /* LBAFRequest.swift */; };
 		31F85D361E8A5DD700F3651E /* LBItemList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F85D351E8A5DD700F3651E /* LBItemList.swift */; };
+		DC5CB0B00E8385AEF80B1595 /* Pods_LBMVC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 201CA99F9E4D14A8BF802B21 /* Pods_LBMVC.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		201CA99F9E4D14A8BF802B21 /* Pods_LBMVC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LBMVC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		310D23421F2F366800FF9BE8 /* LBItemProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBItemProperty.swift; sourceTree = "<group>"; };
 		310FCF3B1E8B5EA200B6E3A1 /* LBItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBItem.swift; sourceTree = "<group>"; };
 		310FCF3D1E8B661900B6E3A1 /* LBViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBViewController.swift; sourceTree = "<group>"; };
 		3116F56B1E8CBA8C0099652A /* LBError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBError.swift; sourceTree = "<group>"; };
@@ -60,7 +63,6 @@
 		31F85D351E8A5DD700F3651E /* LBItemList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBItemList.swift; sourceTree = "<group>"; };
 		48BDC62BEC6A2B3650DED824 /* Pods-LBMVC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LBMVC.release.xcconfig"; path = "Pods/Target Support Files/Pods-LBMVC/Pods-LBMVC.release.xcconfig"; sourceTree = "<group>"; };
 		99CCB7D95B685B93F50E30E3 /* Pods-LBMVC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LBMVC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LBMVC/Pods-LBMVC.debug.xcconfig"; sourceTree = "<group>"; };
-		D0737C04C17BCEDCD535646B /* libPods-LBMVC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LBMVC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,7 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03AFFE373444FE25ECE814D4 /* libPods-LBMVC.a in Frameworks */,
+				DC5CB0B00E8385AEF80B1595 /* Pods_LBMVC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,6 +123,7 @@
 		315D932A1E890B47001B3127 /* LBMVC */ = {
 			isa = PBXGroup;
 			children = (
+				310D23421F2F366800FF9BE8 /* LBItemProperty.swift */,
 				315D932B1E890B5F001B3127 /* LBRequest.swift */,
 				315D932D1E8935C7001B3127 /* LBModel.swift */,
 				31F85D351E8A5DD700F3651E /* LBItemList.swift */,
@@ -152,7 +155,7 @@
 		AB770CE543470CDE743C2BA4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D0737C04C17BCEDCD535646B /* libPods-LBMVC.a */,
+				201CA99F9E4D14A8BF802B21 /* Pods_LBMVC.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 				315838A61E962FF8002F01A3 /* DemoViewController.swift in Sources */,
 				315838AA1E963324002F01A3 /* DemoCell.swift in Sources */,
 				31F85D361E8A5DD700F3651E /* LBItemList.swift in Sources */,
+				310D23431F2F366800FF9BE8 /* LBItemProperty.swift in Sources */,
 				3116F5721E8CED320099652A /* LBTableViewCell.swift in Sources */,
 				315838AC1E963364002F01A3 /* DemoItem.swift in Sources */,
 				310FCF3C1E8B5EA200B6E3A1 /* LBItem.swift in Sources */,

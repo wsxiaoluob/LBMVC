@@ -164,8 +164,9 @@ class LBModel: NSObject, LBRequestDelegate {
         self.request.mode = self.mode;
         
         self.request.setup(baseUrl: self.urlPath())
-        
-        let _ = self.request.addParams(params:dataParams, forKey: "data");
+        if dataParams != nil {
+            self.request.addParams(params:dataParams, forKey: "data");
+        }
         self.request.addHeaderParams(params: self.headerParams());
         
         if self.usePost() {

@@ -98,7 +98,7 @@ class LBTableViewDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item:LBTableViewItem? = self.itemForCell(AtIndex: indexPath);
-        item?.tableViewWidth = tableView.bounds.size.width;
+        item?.tableViewWidth = tableView.bounds.width;
         let cellClass:LBTableViewCell.Type = self.cellClassFor(Item: item, AtIndex: indexPath);
         let identifiler:String = String(describing: cellClass);
         var cell:UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: identifiler);
@@ -112,10 +112,7 @@ class LBTableViewDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
             if item != nil {
                 item!.indexPath = indexPath;
                 customCell.item = item!;
-                /*强制在同一个runloop周期内刷新cell，子类可以在此方法里面布局
-                 若使用layoutSubviews做异步刷新，则无法在下一个runloop的tableView(_:heightForRowAt:)方法中
-                 获取到cell的高度。
-                **/
+                //强制在同一个runloop周期内刷新cell，子类可以在此方法里面布局
                 customCell.setupSubviews();
             } else {
                 //TODO: 异常处理

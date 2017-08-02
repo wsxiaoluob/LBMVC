@@ -14,6 +14,9 @@ class LBTableViewController: LBViewController {
         self.tableView = UITableView.init(frame: CGRect.zero, style: self.tableViewStyle);
         self.tableView.isOpaque = true;
         self.tableView.separatorStyle = .none;
+        //修复iOS8.1的一个问题
+        self.tableView.estimatedRowHeight = 44;
+        self.tableView.rowHeight = UITableViewAutomaticDimension;
         self.tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth];
         self.tableView.dataSource = nil;
         self.tableView.delegate = nil;
